@@ -55,9 +55,10 @@
     const responseButtons = document.getElementById('responseButtons');
   
     let noClickCount = 0;
-    let buttonHeight = 48; // Starting height in pixels
+    let buttonHeight = 48; 
     let buttonWidth = 80;
-    let fontSize = 20; // Starting font size in pixels
+    let fontSize = 20; 
+
     const imagePaths = [
       "./images/image1.gif",
       "./images/image2.gif",
@@ -67,30 +68,48 @@
       "./images/image6.gif",
       "./images/image7.gif"
     ];
+
+    const messages = [
+      "No", 
+      "Are you sure?", 
+      "Dandan please", 
+      "I learned a tiny bit of code to edit this for you :<", 
+      "owaowaowaowaowa", 
+      "okay fine maybe i asked gemini to do a good chunk of help", 
+      "plsplsplsplsplsplsplspls", 
+      "okay this is the last one", 
+      "i was gonna loop this and now i know how!!", 
+      "aaaaaaaaa"
+    ];
   
     noButton.addEventListener('click', function() {
-      if (noClickCount < 5) {
-        noClickCount++;
-        imageDisplay.src = imagePaths[noClickCount];
-        buttonHeight += 35; // Increase height by 5px on each click
-        buttonWidth += 35;
-        fontSize += 25; // Increase font size by 1px on each click
-        yesButton.style.height = `${buttonHeight}px`; // Update button height
-        yesButton.style.width = `${buttonWidth}px`;
-        yesButton.style.fontSize = `${fontSize}px`; // Update font size
-        if (noClickCount < 10) {
-          noButton.textContent = ["No", "Are you sure?", "Dandan please", "I learned a tiny bit of code to edit this for you :<", "owaowaowaowaowa", "okay fine maybe i asked gemini to do a good chunk of help", "plsplsplsplsplsplsplspls", "okay this is the last one", "i was gonna loop this but idk how", "aaaaaaaaa"][noClickCount];
-        }
-      }
+      noClickCount++;
+
+      // 1. Loop through images
+      imageDisplay.src = imagePaths[noClickCount % imagePaths.length];
+
+      // 2. Loop through text messages
+      noButton.textContent = messages[noClickCount % messages.length];
+
+      // 3. Keep making YES bigger (No more "if" limit!)
+      buttonHeight += 35; 
+      buttonWidth += 35;
+      fontSize += 25; 
+      yesButton.style.height = `${buttonHeight}px`; 
+      yesButton.style.width = `${buttonWidth}px`;
+      yesButton.style.fontSize = `${fontSize}px`; 
+
+      // 4. Make NO smaller (Shrinks 10% each time, stops at 30% size)
+      let newScale = Math.max(0.3, 1 - (noClickCount * 0.1));
+      noButton.style.transform = `scale(${newScale})`;
     });
   
     yesButton.addEventListener('click', () => {
-      imageDisplay.src = './images/image7.gif'; // Change to image7.gif
-      valentineQuestion.textContent = "yipeeee :3 am happy nao"; // Change the question text
-      responseButtons.style.display = 'none'; // Hide both buttons
-      confetti(); // Trigger confetti animation
+      imageDisplay.src = './images/image7.gif'; 
+      valentineQuestion.textContent = "yipeeee :3 am happy nao"; 
+      responseButtons.style.display = 'none'; 
+      confetti(); 
     });
   </script>  
 </body>
-
 </html>
