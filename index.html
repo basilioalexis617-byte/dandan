@@ -26,20 +26,25 @@
         transform: translateY(-10px);
       }
     }
+
+    /* This makes the shrinking look smooth */
+    #noButton {
+      transition: transform 0.3s ease;
+    }
   </style>
 </head>
 <body class="gradient-background">
   <div class="flex items-center justify-center h-screen">
     <div class="flex flex-col items-center p-4">
-      <img id="imageDisplay" src="./images/image1.gif" alt="Cute kitten with flowers" class="rounded-md h-[300px]" style="object-fit: cover;" />
-      <h2 id="valentineQuestion" class="text-4xl font-bold italic text-[#bd1e59] my-4">Ohayooo Dandan :3 Will you be my Valentine?</h2>
+      <img id="imageDisplay" src="./images/image1.gif" alt="Cute Valentine GIF" class="rounded-md h-[300px]" style="object-fit: cover;" />
+      <h2 id="valentineQuestion" class="text-4xl font-bold italic text-[#bd1e59] my-4 text-center">Ohayooo Dandan :3 Will you be my Valentine?</h2>
       <div class="flex gap-4 pt-[20px] items-center" id="responseButtons">
         <button id="yesButton"
-          class="bounce2 inline-flex items-center justify-center whitespace-nowrap rounded-md text-[20px] font-medium disabled:pointer-events-none disabled:opacity-50 hover:bg-green-400 min-h-12 min-w-[75px] px-4 py-2 bg-green-500 text-white transition">
+          class="bounce2 inline-flex items-center justify-center whitespace-nowrap rounded-md text-[20px] font-medium hover:bg-green-400 min-h-12 min-w-[75px] px-4 py-2 bg-green-500 text-white transition-all duration-300">
           Yes
         </button>
         <button id="noButton"
-          class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-[20px] font-medium transition disabled:pointer-events-none disabled:opacity-50 hover:bg-red-700 h-12 min-w-[75px] w-auto px-4 py-2 bg-red-500 text-white">
+          class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-[20px] font-medium hover:bg-red-700 h-12 min-w-[75px] w-auto px-4 py-2 bg-red-500 text-white">
           No
         </button>
       </div>
@@ -48,6 +53,7 @@
 
   <script type="module">
     import confetti from 'https://cdn.skypack.dev/canvas-confetti';
+
     const yesButton = document.getElementById('yesButton');
     const noButton = document.getElementById('noButton');
     const imageDisplay = document.getElementById('imageDisplay');
@@ -59,14 +65,14 @@
     let buttonWidth = 80;
     let fontSize = 20; 
 
+    // This list will cycle forever
     const imagePaths = [
       "./images/image1.gif",
       "./images/image2.gif",
       "./images/image3.gif",
       "./images/image4.gif",
       "./images/image5.gif",
-      "./images/image6.gif",
-      "./images/image7.gif"
+      "./images/image6.gif"
     ];
 
     const messages = [
@@ -85,13 +91,15 @@
     noButton.addEventListener('click', function() {
       noClickCount++;
 
-      // 1. Loop through images
-      imageDisplay.src = imagePaths[noClickCount % imagePaths.length];
+      // 1. Cycle Images (using % ensures it goes 1,2,3,4,5,6,1,2...)
+      const imageIndex = noClickCount % imagePaths.length;
+      imageDisplay.src = imagePaths[imageIndex];
 
-      // 2. Loop through text messages
-      noButton.textContent = messages[noClickCount % messages.length];
+      // 2. Cycle Text Messages
+      const messageIndex = noClickCount % messages.length;
+      noButton.textContent = messages[messageIndex];
 
-      // 3. Keep making YES bigger (No more "if" limit!)
+      // 3. Growth Logic for YES
       buttonHeight += 35; 
       buttonWidth += 35;
       fontSize += 25; 
@@ -99,13 +107,13 @@
       yesButton.style.width = `${buttonWidth}px`;
       yesButton.style.fontSize = `${fontSize}px`; 
 
-      // 4. Make NO smaller (Shrinks 10% each time, stops at 30% size)
-      let newScale = Math.max(0.3, 1 - (noClickCount * 0.1));
+      // 4. Shrink Logic for NO (Stops at 30% of original size)
+      const newScale = Math.max(0.3, 1 - (noClickCount * 0.1));
       noButton.style.transform = `scale(${newScale})`;
     });
   
     yesButton.addEventListener('click', () => {
-      imageDisplay.src = './images/image7.gif'; 
+      imageDisplay.src = './images/image7.gif'; // The final happy GIF
       valentineQuestion.textContent = "yipeeee :3 am happy nao"; 
       responseButtons.style.display = 'none'; 
       confetti(); 
