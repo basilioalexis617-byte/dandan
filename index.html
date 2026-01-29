@@ -26,6 +26,10 @@
         transform: translateY(-10px);
       }
     }
+    
+    #noButton {
+      transition: transform 0.2s ease;
+    }
   </style>
 </head>
 <body class="gradient-background">
@@ -96,36 +100,18 @@
         noButton.textContent = "No";
       }
 
-      // 3. Growth Logic
-      if (noClickCount < messages.length) {
-        buttonHeight += 35; 
-        buttonWidth += 35;
-        fontSize += 25; 
-      } else {
-        // Exponential growth
-        buttonHeight *= 1.6; 
-        buttonWidth *= 1.6;
-        fontSize *= 1.4;
-      }
+      // 3. Steady Growth Logic (No exponential takeover)
+      buttonHeight += 45; // Increased slightly so it still gets big
+      buttonWidth += 45;
+      fontSize += 20; 
 
       yesButton.style.height = `${buttonHeight}px`; 
       yesButton.style.width = `${buttonWidth}px`;
       yesButton.style.fontSize = `${fontSize}px`; 
 
-      // 4. Shrink Logic for NO
-      const newScale = Math.max(0.1, 1 - (noClickCount * 0.1));
+      // 4. Shrink Logic for NO (Stays visible but tiny)
+      const newScale = Math.max(0.3, 1 - (noClickCount * 0.1));
       noButton.style.transform = `scale(${newScale})`;
-
-      // 5. THE TAKEOVER
-      if (buttonHeight > 800) {
-        yesButton.style.position = "fixed";
-        yesButton.style.zIndex = "9999";
-        yesButton.style.top = "50%";
-        yesButton.style.left = "50%";
-        yesButton.style.transform = "translate(-50%, -50%)";
-        yesButton.style.width = "100vw";
-        yesButton.style.height = "100vh";
-      }
     });
   
     yesButton.addEventListener('click', () => {
