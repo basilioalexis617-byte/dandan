@@ -1,57 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Valentines Day</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <style>
-    .gradient-background {
-      background: rgb(255, 208, 229);
-      background: linear-gradient(180deg, rgba(255, 208, 229, 1) 0%, rgba(255, 232, 242, 1) 36%, rgba(255, 255, 255, 1) 100%);
-    }
-
-    .bounce2 {
-      animation: bounce2 2s ease infinite;
-    }
-
-    @keyframes bounce2 {
-      0%, 20%, 50%, 80%, 100% {
-        transform: translateY(0);
-      }
-      40% {
-        transform: translateY(-20px);
-      }
-      60% {
-        transform: translateY(-10px);
-      }
-    }
-
-    /* This makes the shrinking look smooth */
-    #noButton {
-      transition: transform 0.3s ease;
-    }
-  </style>
-</head>
-<body class="gradient-background">
-  <div class="flex items-center justify-center h-screen">
-    <div class="flex flex-col items-center p-4">
-      <img id="imageDisplay" src="./images/image1.gif" alt="Cute Valentine GIF" class="rounded-md h-[300px]" style="object-fit: cover;" />
-      <h2 id="valentineQuestion" class="text-4xl font-bold italic text-[#bd1e59] my-4 text-center">Ohayooo Dandan :3 Will you be my Valentine?</h2>
-      <div class="flex gap-4 pt-[20px] items-center" id="responseButtons">
-        <button id="yesButton"
-          class="bounce2 inline-flex items-center justify-center whitespace-nowrap rounded-md text-[20px] font-medium hover:bg-green-400 min-h-12 min-w-[75px] px-4 py-2 bg-green-500 text-white transition-all duration-300">
-          Yes
-        </button>
-        <button id="noButton"
-          class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-[20px] font-medium hover:bg-red-700 h-12 min-w-[75px] w-auto px-4 py-2 bg-red-500 text-white">
-          No
-        </button>
-      </div>
-    </div>
-  </div>
-
-  <script type="module">
+<script type="module">
     import confetti from 'https://cdn.skypack.dev/canvas-confetti';
 
     const yesButton = document.getElementById('yesButton');
@@ -65,7 +12,6 @@
     let buttonWidth = 80;
     let fontSize = 20; 
 
-    // This list will cycle forever
     const imagePaths = [
       "./images/image1.gif",
       "./images/image2.gif",
@@ -91,15 +37,20 @@
     noButton.addEventListener('click', function() {
       noClickCount++;
 
-      // 1. Cycle Images (using % ensures it goes 1,2,3,4,5,6,1,2...)
+      // 1. Cycle Images (Always loops 1-6)
       const imageIndex = noClickCount % imagePaths.length;
       imageDisplay.src = imagePaths[imageIndex];
 
-      // 2. Cycle Text Messages
-      const messageIndex = noClickCount % messages.length;
-      noButton.textContent = messages[messageIndex];
+      // 2. Message Logic
+      if (noClickCount < messages.length) {
+        // Play through your custom messages first
+        noButton.textContent = messages[noClickCount];
+      } else {
+        // Once the list is done, it just stays "No" (or you can change this to "Yes?")
+        noButton.textContent = "No";
+      }
 
-      // 3. Growth Logic for YES
+      // 3. Growth Logic for YES (Infinite)
       buttonHeight += 35; 
       buttonWidth += 35;
       fontSize += 25; 
@@ -107,17 +58,15 @@
       yesButton.style.width = `${buttonWidth}px`;
       yesButton.style.fontSize = `${fontSize}px`; 
 
-      // 4. Shrink Logic for NO (Stops at 30% of original size)
+      // 4. Shrink Logic for NO
       const newScale = Math.max(0.3, 1 - (noClickCount * 0.1));
       noButton.style.transform = `scale(${newScale})`;
     });
   
     yesButton.addEventListener('click', () => {
-      imageDisplay.src = './images/image7.gif'; // The final happy GIF
+      imageDisplay.src = './images/image7.gif'; 
       valentineQuestion.textContent = "yipeeee :3 am happy nao"; 
       responseButtons.style.display = 'none'; 
       confetti(); 
     });
-  </script>  
-</body>
-</html>
+  </script>
