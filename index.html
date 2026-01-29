@@ -48,45 +48,45 @@
         noButton.textContent = "No";
       }
 
-      // 3. EXPONENTIAL Growth Logic
-      // If we are still in the messages, grow normally (+35)
-      // Once we hit the "No" loop, grow by a multiplier (1.5x each time)
+      // 3. Growth Logic
       if (noClickCount < messages.length) {
+        // Normal growth during messages
         buttonHeight += 35; 
         buttonWidth += 35;
         fontSize += 25; 
       } else {
-        buttonHeight *= 1.5; 
-        buttonWidth *= 1.5;
+        // EXPONENTIAL growth after messages
+        buttonHeight *= 1.6; 
+        buttonWidth *= 1.6;
         fontSize *= 1.4;
       }
 
+      // Apply the sizes
       yesButton.style.height = `${buttonHeight}px`; 
       yesButton.style.width = `${buttonWidth}px`;
       yesButton.style.fontSize = `${fontSize}px`; 
 
-      // 4. Shrink Logic for NO (Gets tiny very fast at the end)
-      const shrinkFactor = noClickCount < messages.length ? 0.1 : 0.2;
-      const newScale = Math.max(0.1, 1 - (noClickCount * shrinkFactor));
+      // 4. Shrink Logic for NO
+      const newScale = Math.max(0.1, 1 - (noClickCount * 0.1));
       noButton.style.transform = `scale(${newScale})`;
 
-      // 5. Emergency "Cover the Screen"
-      // If the button is already huge, just make it fill everything
-      if (buttonHeight > 1000) {
+      // 5. THE TAKEOVER
+      // Once it's huge, make it fill the screen so he has to click it
+      if (buttonHeight > 800) {
         yesButton.style.position = "fixed";
-        yesButton.style.top = "0";
-        yesButton.style.left = "0";
+        yesButton.style.zIndex = "9999";
+        yesButton.style.top = "50%";
+        yesButton.style.left = "50%";
+        yesButton.style.transform = "translate(-50%, -50%)";
         yesButton.style.width = "100vw";
         yesButton.style.height = "100vh";
-        yesButton.style.zIndex = "999";
       }
     });
   
     yesButton.addEventListener('click', () => {
-      // Reset position if it was fixed
-      yesButton.style.position = "static"; 
       imageDisplay.src = './images/image7.gif'; 
       valentineQuestion.textContent = "yipeeee :3 am happy nao"; 
       responseButtons.style.display = 'none'; 
       confetti(); 
     });
+</script>
