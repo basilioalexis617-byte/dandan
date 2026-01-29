@@ -64,13 +64,13 @@
     let buttonWidth = 80;
     let fontSize = 20; 
 
-    const imagePaths = [
-      "./images/image1.gif",
-      "./images/image2.gif",
-      "./images/image3.gif",
-      "./images/image4.gif",
-      "./images/image5.gif",
-      "./images/image6.gif"
+    const allImages = [
+      "./images/image1.gif", // Lovey 1
+      "./images/image2.gif", // Lovey 2
+      "./images/image3.gif", // Lovey 3
+      "./images/image4.gif", // Crying 1
+      "./images/image5.gif", // Crying 2
+      "./images/image6.gif"  // Crying 3
     ];
 
     const messages = [
@@ -89,9 +89,16 @@
     noButton.addEventListener('click', function() {
       noClickCount++;
 
-      // 1. Cycle Images
-      const imageIndex = noClickCount % imagePaths.length;
-      imageDisplay.src = imagePaths[imageIndex];
+      // 1. Logic for looping only the last 3 GIFs
+      if (noClickCount < 3) {
+        // Show the first 3 lovey images
+        imageDisplay.src = allImages[noClickCount];
+      } else {
+        // Loop ONLY images 4, 5, and 6 (the crying ones)
+        // This math keeps it between index 3 and 5
+        const cryingIndex = 3 + ((noClickCount - 3) % 3);
+        imageDisplay.src = allImages[cryingIndex];
+      }
 
       // 2. Message Logic
       if (noClickCount < messages.length) {
@@ -100,26 +107,11 @@
         noButton.textContent = "No";
       }
 
-      // 3. Steady Growth Logic (No exponential takeover)
-      buttonHeight += 45; // Increased slightly so it still gets big
+      // 3. Steady Growth Logic
+      buttonHeight += 45; 
       buttonWidth += 45;
       fontSize += 20; 
 
       yesButton.style.height = `${buttonHeight}px`; 
       yesButton.style.width = `${buttonWidth}px`;
-      yesButton.style.fontSize = `${fontSize}px`; 
-
-      // 4. Shrink Logic for NO (Stays visible but tiny)
-      const newScale = Math.max(0.3, 1 - (noClickCount * 0.1));
-      noButton.style.transform = `scale(${newScale})`;
-    });
-  
-    yesButton.addEventListener('click', () => {
-      imageDisplay.src = './images/image7.gif'; 
-      valentineQuestion.textContent = "yipeeee :3 am happy nao"; 
-      responseButtons.style.display = 'none'; 
-      confetti(); 
-    });
-  </script>
-</body>
-</html>
+      yesButton.style.fontSize = `${fontSize}px
